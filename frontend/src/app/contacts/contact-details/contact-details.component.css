@@ -1,0 +1,22 @@
+span {
+  font-weight: bold;
+}
+
+section {
+  display: table;
+}
+
+.flex-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.center-to-field {
+  transform: translateY(5px);
+}
+
+.star-bookmarked {
+  color: rgb(166, 255, 0) !important;
+}

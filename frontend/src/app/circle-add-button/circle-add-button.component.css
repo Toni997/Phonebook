@@ -1,0 +1,9 @@
+.add-button-absolute {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+.add-icon {
+  font-size: 25px;
+}

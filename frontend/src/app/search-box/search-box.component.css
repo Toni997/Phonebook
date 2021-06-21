@@ -1,0 +1,19 @@
+.search-bar {
+  width: 500px;
+}
+
+.search-by-select {
+  width: 200px;
+  margin-left: 10px;
+}
+
+@media only screen and (max-width: 750px) {
+  .search-bar {
+    width: 100%;
+  }
+
+  .search-by-select {
+    width: 100%;
+    margin-left: 0;
+  }
+}

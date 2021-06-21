@@ -1,0 +1,10 @@
+<div class="form-container">
+  <h1> Uredi kontakt </h1>
+
+  <h3 *ngIf="!kontakt">Kontakt se ili učitava ili ne postoji...</h3>
+
+  <mat-divider></mat-divider>
+
+  <app-form-contact *ngIf="kontakt" [model]="kontakt"
+    (onUserUpdated)="updateContact($event)"></app-form-contact>
+</div>

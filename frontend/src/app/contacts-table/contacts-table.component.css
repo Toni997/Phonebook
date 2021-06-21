@@ -1,0 +1,39 @@
+.action-buttons {
+  visibility: hidden;
+}
+
+mat-icon {
+  color: #aaa !important;
+}
+
+.mat-row {
+  cursor: pointer;
+}
+
+.mat-row:hover {
+  background-color: #f3f3f3;
+}
+
+.mat-row:hover .action-button {
+  visibility: visible;
+}
+
+.star-bookmarked {
+  color: rgba(216, 176, 0, 0.555) !important;
+}
+
+.star-visible {
+  visibility: visible !important;
+}
+
+@media only screen and (max-width: 1200px) {
+  .only-lg {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .only-md {
+    display: none !important;
+  }
+}

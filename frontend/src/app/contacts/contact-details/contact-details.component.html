@@ -1,0 +1,78 @@
+<div *ngIf="!kontakt" class="form-container">
+  <h3>Kontakt se ili učitava ili
+    nije pronađeno ništa...</h3>
+</div>
+
+<div *ngIf="kontakt" class="form-container">
+  <h1>Detalji kontakta</h1>
+
+  <mat-divider></mat-divider>
+
+  <p><span>Ime: </span>{{kontakt.ime}}</p>
+  <p><span>Prezime: </span>{{kontakt.prezime}}</p>
+  <p><span>Nadimak: </span>{{kontakt.nadimak}}</p>
+  <p><span>Adresa: </span>{{kontakt.adresa}}</p>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngIf="kontakt.emailAdrese.length > 0">
+    <ng-container *ngFor="let email of kontakt.emailAdrese">
+      <p>
+        <span>
+          <mat-icon class="center-to-field">email</mat-icon>
+        </span> {{email.email}}
+      </p>
+    </ng-container>
+
+    <mat-divider></mat-divider>
+  </ng-container>
+
+  <ng-container *ngFor="let phoneNumber of kontakt.brojeviTelefona">
+    <p>
+      <span>
+        <mat-icon class="center-to-field">phone</mat-icon>
+      </span> (+{{phoneNumber.pozivniBrojDrzave}}) {{phoneNumber.broj}}
+      <small *ngIf="phoneNumber.opis"> &middot; {{phoneNumber.opis}}</small>
+    </p>
+  </ng-container>
+
+  <div *ngIf="kontakt.tagovi.length > 0">
+    <mat-divider></mat-divider>
+
+    <mat-chip-list>
+      <mat-chip class="mt-20" *ngFor="let tag of kontakt.tagovi"
+        color="primary">
+        {{tag.naziv}}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+
+  <div class="flex-container">
+    <div class="button-container">
+      <button
+        matTooltip="{{kontakt.bookmarkiran ? 'Kontakt je u favoritima' : 'Kontakt nije u favoritima'}}"
+        mat-fab color="primary">
+        <mat-icon [ngClass]="{'star-bookmarked' : kontakt.bookmarkiran}">star
+        </mat-icon>
+      </button>
+    </div>
+    <div class="button-container">
+      <button routerLink="{{'/kontakt/uredi/' + kontakt.kontaktID}}"
+        matTooltip="Uredi kontakt" mat-fab color="accent">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <swal #deleteSwal title="Oprez"
+      text="Jeste li sigurni da želite obrisati {{kontakt.ime}} iz kontakata?"
+      icon="warning" [showCancelButton]="true" [focusCancel]="true"
+      (confirm)="deleteContact(kontakt.kontaktID)">
+    </swal>
+    <div class="button-container">
+      <button [swal]="deleteSwal" matTooltip="Obriši kontakt" mat-fab
+        color="warn">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+</div>

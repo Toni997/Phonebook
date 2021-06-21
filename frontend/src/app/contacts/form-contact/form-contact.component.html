@@ -1,0 +1,118 @@
+<form (ngSubmit)="saveChanges()" [formGroup]="form">
+
+  <h4>Osnovne informacije*</h4>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Ime*</mat-label>
+    <input formControlName="ime" matInput>
+    <mat-error>Nije validan unos</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Prezime</mat-label>
+    <input formControlName="prezime" matInput>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Nadimak</mat-label>
+    <input formControlName="nadimak" matInput>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Adresa</mat-label>
+    <input formControlName="adresa" matInput>
+  </mat-form-field>
+
+  <mat-divider></mat-divider>
+
+  <h4>Email Adrese</h4>
+
+  <div formArrayName="emailAdrese">
+    <a mat-flat-button color="primary" (click)="addEmailAddress()">
+      <mat-icon>add</mat-icon> Email Adresa
+    </a>
+    <div
+      *ngFor="let email_address of form.controls.emailAdrese['controls']; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field appearance="fill">
+          <mat-label>Email Adresa #{{i+1}}</mat-label>
+          <input type="text" formControlName="email" matInput>
+          <mat-error>Nije validan unos</mat-error>
+        </mat-form-field>
+        <a mat-mini-fab color="warn" (click)="removeEmailAddress(i)">
+          <mat-icon>remove</mat-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <h4>Brojevi telefona*</h4>
+
+  <div formArrayName="brojeviTelefona">
+    <a mat-flat-button color="primary" (click)="addPhoneNumber()">
+      <mat-icon>add</mat-icon> Broj telefona
+    </a>
+    <div
+      *ngFor="let phone_number of form.controls.brojeviTelefona['controls']; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field appearance="fill">
+          <mat-label>Pozivni broj države*</mat-label>
+          <input formControlName="pozivniBrojDrzave" matInput>
+          <mat-error>Nije validan unos</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Broj telefona*</mat-label>
+          <input formControlName="broj" matInput>
+          <mat-error>Nije validan unos</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Opis</mat-label>
+          <input formControlName="opis" matInput>
+        </mat-form-field>
+        <a *ngIf="form.controls.brojeviTelefona['controls'].length > 1"
+          mat-mini-fab color="warn" (click)="removePhoneNumber(i)">
+          <mat-icon>remove</mat-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <h4>Tagovi</h4>
+
+  <div formArrayName="tagovi">
+    <a mat-flat-button color="primary" (click)="addTag()">
+      <mat-icon>add</mat-icon> Tag
+    </a>
+    <div *ngFor="let tag of form.controls.tagovi['controls']; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field appearance="fill">
+          <mat-label>Tag #{{i+1}}</mat-label>
+          <input formControlName="naziv" matInput>
+          <mat-error>Nije validan unos</mat-error>
+        </mat-form-field>
+        <a mat-mini-fab color="warn" (click)="removeTag(i)">
+          <mat-icon>remove</mat-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <mat-checkbox formControlName="bookmarkiran">Stavi u favorite</mat-checkbox>
+  </div>
+
+  <div>
+    <button mat-flat-button color="primary"
+      [disabled]="form.invalid">Spremi</button>
+    <a mat-stroked-button routerLink="/">Odustani</a>
+  </div>
+
+  <p>* Obavezno polje ili sadrži obavezna polja</p>
+
+</form>

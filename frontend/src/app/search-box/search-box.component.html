@@ -1,0 +1,33 @@
+<form (ngSubmit)="updateContacts()">
+  <mat-form-field class="search-bar" appearance="outline">
+    <mat-label>
+      <mat-icon>search</mat-icon> Pretraži
+      kontakte
+    </mat-label>
+    <input [(ngModel)]="searchKeyword" matInput
+      placeholder="Upiši nešto i klikni enter za pretragu..." type="search"
+      name="select_keyword">
+  </mat-form-field>
+
+  <mat-form-field class="search-by-select" appearance="outline">
+    <mat-label>Pretraži po</mat-label>
+    <mat-select [(ngModel)]="searchBy" name="select_searchby">
+      <mat-option value="po-imenu" selected>
+        Imenu
+      </mat-option>
+      <mat-option value="po-prezimenu">
+        Prezimenu
+      </mat-option>
+      <mat-option value="po-tagu">
+        Tagu
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div>
+    <mat-checkbox [(ngModel)]="onlyFavorites"
+      (ngModelChange)="showOnlyFavorites()" name="samoFavoriti">
+      Prikaži samo sve favorite
+    </mat-checkbox>
+  </div>
+</form>
