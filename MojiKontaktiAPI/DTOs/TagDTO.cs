@@ -9,10 +9,15 @@ namespace MojiKontaktiAPI.DTOs
 {
     public class TagIzradaDTO
     {
-        public int KontaktID { get; set; }
         [Required]
         [MaxLength(20)]
         public string Naziv { get; set; }
+    }
+
+    public class TagIzmjenaDTO : TagIzradaDTO
+    {
+        public int TagID { get; set; }
+
     }
 
     public class TagDTO : TagIzradaDTO

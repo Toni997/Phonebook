@@ -9,12 +9,17 @@ namespace MojiKontaktiAPI.DTOs
 {
     public class EmailAdresaIzradaDTO
     {
-        public int KontaktID { get; set; }
+        //public int KontaktID { get; set; }
         [Required]
         [EmailAddress]
         [MaxLength(320)]
         public string Email { get; set; }
         public bool Glavna { get; set; }
+    }
+
+    public class EmailAdresaIzmjenaDTO : EmailAdresaIzradaDTO
+    {
+
     }
 
     public class EmailAdresaDTO : EmailAdresaIzradaDTO

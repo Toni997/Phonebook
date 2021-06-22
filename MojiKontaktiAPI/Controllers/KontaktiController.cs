@@ -20,7 +20,6 @@ namespace MojiKontaktiAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<KontaktiController> _logger;
-        //private readonly MojiKontaktiDbContext _context;
 
         public KontaktiController(
             IUnitOfWork unitOfWork,
@@ -39,79 +38,111 @@ namespace MojiKontaktiAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetContacts()
         {
-            //return await context.Kontakti
-            //                                .Include(k => k.EmailAdrese)
-            //                                .Include(k => k.BrojeviTelefona)
-            //                                .Include(k => k.Tagovi)
-            //                                .OrderBy(k => k.Ime)
-            //                                .ToListAsync();
-
             try
             {
-                var kontakti = await _unitOfWork.Kontakti.GetAll();
+                var kontakti = await _unitOfWork.Kontakti.GetAll(
+                    orderBy: k => k.OrderBy(k => k.Ime),
+                    includes: new List<string> { "EmailAdrese", "BrojeviTelefona", "Tagovi" });
                 var rezultati = _mapper.Map<IList<KontaktDTO>>(kontakti);
                 return Ok(rezultati);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Somethign went wrong in the {nameof(GetContacts)}");
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetContacts)}");
                 return StatusCode(500, "Internal Server Error. Please Try Again Later.");
             }
         }
 
-        // Get all contacts that contain keyword in the name @api/kontakti/po-imenu/{keyword}
-        //[HttpGet("po-imenu/{keyword}")]
-        //public async Task<ActionResult<IEnumerable<Kontakt>>> GetByName(string keyword)
-        //{
-        //    return await context.Kontakti.Where(kontakt => kontakt.Ime.Contains(keyword))
-        //                                    .Include(k => k.EmailAdrese)
-        //                                    .Include(k => k.BrojeviTelefona)
-        //                                    .Include(k => k.Tagovi)
-        //                                    .OrderBy(k => k.Ime)
-        //                                    .ToListAsync();
+        //Get all contacts that contain keyword in the name @api/kontakti/po-imenu/{keyword}
+        [HttpGet("po-imenu/{keyword}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Kontakt>>> GetContactsByName(string keyword)
+        {
+            try
+            {
+                var kontakti = await _unitOfWork.Kontakti.GetAll(
+                    expression: k => k.Ime.Contains(keyword),
+                    orderBy: k => k.OrderBy(k => k.Ime),
+                    includes: new List<string> { "EmailAdrese", "BrojeviTelefona", "Tagovi" });
+                var rezultati = _mapper.Map<IList<KontaktDTO>>(kontakti);
+                return Ok(rezultati);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetContactsByName)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
 
+        // Get all contacts that contain keyword in the surname @api/kontakti/po-prezimenu/{keyword}
+        [HttpGet("po-prezimenu/{keyword}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Kontakt>>> GetContactsBySurname(string keyword)
+        {
+            try
+            {
+                var kontakti = await _unitOfWork.Kontakti.GetAll(
+                    expression: k => k.Prezime.Contains(keyword),
+                    orderBy: k => k.OrderBy(k => k.Ime),
+                    includes: new List<string> { "EmailAdrese", "BrojeviTelefona", "Tagovi" });
+                var rezultati = _mapper.Map<IList<KontaktDTO>>(kontakti);
+                return Ok(rezultati);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetContactsBySurname)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
 
-        //}
+        // Get all contacts that contain keyword in the tags @api/kontakti/po-tagu/{keyword}
+        [HttpGet("po-tagu/{keyword}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Kontakt>>> GetContactsByTag(string keyword)
+        {
+            try
+            {
+                var kontakti = await _unitOfWork.Kontakti.GetAll(
+                    expression: k => k.Tagovi.Any(tag => tag.Naziv.Contains(keyword)),
+                    orderBy: k => k.OrderBy(k => k.Ime),
+                    includes: new List<string> { "EmailAdrese", "BrojeviTelefona", "Tagovi" });
+                var rezultati = _mapper.Map<IList<KontaktDTO>>(kontakti);
+                return Ok(rezultati);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetContactsByTag)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
 
-        //// Get all contacts that contain keyword in the surname @api/kontakti/po-prezimenu/{keyword}
-        //[HttpGet("po-prezimenu/{keyword}")]
-        //public async Task<ActionResult<IEnumerable<Kontakt>>> GetBySurname(string keyword)
-        //{
-        //    return await context.Kontakti.Where(kontakt => kontakt.Prezime.Contains(keyword))
-        //                                    .Include(k => k.EmailAdrese)
-        //                                    .Include(k => k.BrojeviTelefona)
-        //                                    .Include(k => k.Tagovi)
-        //                                    .OrderBy(k => k.Ime)
-        //                                    .ToListAsync();
-        //}
-
-        //// Get all contacts that contain keyword in the tags @api/kontakti/po-tagu/{keyword}
-        //[HttpGet("po-tagu/{keyword}")]
-        //public async Task<ActionResult<IEnumerable<Kontakt>>> GetByTag(string keyword)
-        //{
-        //    return await context.Kontakti
-        //                                    .Include(k => k.EmailAdrese)
-        //                                    .Include(k => k.BrojeviTelefona)
-        //                                    .Include(k => k.Tagovi)
-        //                                    .Where(kontakt => kontakt.Tagovi.Any(tag => tag.Naziv.Contains(keyword)))
-        //                                    .OrderBy(k => k.Ime)
-        //                                    .ToListAsync();
-        //}
-
-        //// Get all contacts that are favorited @api/kontakti/samo-favoriti
-        //[HttpGet("samo-favoriti")]
-        //public async Task<ActionResult<IEnumerable<Kontakt>>> GetFavorites()
-        //{
-        //    return await context.Kontakti.Where(kontakt => kontakt.Bookmarkiran)
-        //                                    .Include(k => k.EmailAdrese)
-        //                                    .Include(k => k.BrojeviTelefona)
-        //                                    .Include(k => k.Tagovi)
-        //                                    .OrderBy(k => k.Ime)
-        //                                    .ToListAsync();
-        //}
+        // Get all contacts that are favorited @api/kontakti/samo-favoriti
+        [HttpGet("samo-favoriti")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Kontakt>>> GetFavoritedContacts()
+        {
+            try
+            {
+                var kontakti = await _unitOfWork.Kontakti.GetAll(
+                    expression: k => k.Bookmarkiran,
+                    orderBy: k => k.OrderBy(k => k.Ime),
+                    includes: new List<string> { "EmailAdrese", "BrojeviTelefona", "Tagovi" });
+                var rezultati = _mapper.Map<IList<KontaktDTO>>(kontakti);
+                return Ok(rezultati);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetFavoritedContacts)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
 
         // Get contact by id @api/kontakti/{id}
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "GetContact")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -121,7 +152,7 @@ namespace MojiKontaktiAPI.Controllers
             {
                 var kontakt = await _unitOfWork.Kontakti.Get(k => k.KontaktID == id,
                     new List<string> { "EmailAdrese", "BrojeviTelefona", "Tagovi" });
-                
+
                 if (kontakt == null)
                 {
                     return NotFound();
@@ -132,70 +163,108 @@ namespace MojiKontaktiAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Somethign went wrong in the {nameof(GetContact)}");
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetContact)}");
                 return StatusCode(500, "Internal Server Error. Please Try Again Later.");
             }
 
         }
 
-        //// Create contact @api/kontakti
-        //[HttpPost]
-        //public async Task<ActionResult<Kontakt>> Post([FromBody] KontaktIzradaDTO kontaktIzradaDTO)
-        //{
-        //    var kontakt = mapper.Map<Kontakt>(kontaktIzradaDTO);
-        //    context.Add(kontakt);
-        //    await context.SaveChangesAsync();
+        // Create contact @api/kontakti
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateContact([FromBody] KontaktIzradaDTO kontaktDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Invalid POST attempt in {nameof(CreateContact)}");
+                return BadRequest(ModelState);
+            }
 
-        //    return await Task.FromResult(kontakt);
-        //}
+            try
+            {
+                var kontakt = _mapper.Map<Kontakt>(kontaktDTO);
+                await _unitOfWork.Kontakti.Insert(kontakt);
+                await _unitOfWork.Save();
+                //return CreatedAtAction("GetContact", kontakt);
+                return CreatedAtRoute("GetContact", new { id = kontakt.KontaktID }, kontakt);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(CreateContact)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
 
-        //// Update contact @api/kontakti/{id}
-        //[HttpPut("{id:int}")]
-        //public async Task<ActionResult> Put(int id, [FromBody] KontaktIzradaDTO kontaktIzradaDTO)
-        //{
-        //    // needs a better solution
-        //    var kontakt = context.Kontakti
-        //                                    .Include(k => k.EmailAdrese)
-        //                                    .Include(k => k.BrojeviTelefona)
-        //                                    .Include(k => k.Tagovi)
-        //                                    .FirstOrDefaultAsync(k => k.KontaktID == id);
-        //    if (kontakt == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // Update contact @api/kontakti/{id}
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateContact(int id, [FromBody] KontaktIzmjenaDTO kontaktDTO)
+        {
+            if (!ModelState.IsValid || id < 1)
+            {
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateContact)}");
+                return BadRequest(ModelState);
+            }
 
-        //    context.Kontakti.Attach(kontakt.Result);
-        //    context.Kontakti.Update(kontakt.Result);
+            try
+            {
+                var kontakt = await _unitOfWork.Kontakti.Get(k => k.KontaktID == id);
+                if (kontakt == null)
+                {
+                    _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateContact)}");
+                    return BadRequest("Submitted data is invalid.");
+                }
 
-        //    kontakt.Result.Ime = kontaktIzradaDTO.Ime;
-        //    kontakt.Result.Prezime = kontaktIzradaDTO.Prezime;
-        //    kontakt.Result.Nadimak = kontaktIzradaDTO.Nadimak;
-        //    kontakt.Result.Adresa = kontaktIzradaDTO.Adresa;
-        //    kontakt.Result.Bookmarkiran = kontaktIzradaDTO.Bookmarkiran;
-        //    kontakt.Result.EmailAdrese = mapper.Map<IList<EmailAdresa>>(kontaktIzradaDTO.EmailAdrese);
-        //    kontakt.Result.BrojeviTelefona = mapper.Map<IList<BrojTelefona>>(kontaktIzradaDTO.BrojeviTelefona);
-        //    kontakt.Result.Tagovi = mapper.Map<IList<Tag>>(kontaktIzradaDTO.Tagovi);
+                _mapper.Map(kontaktDTO, kontakt);
 
-        //    await context.SaveChangesAsync();
-        //    return NoContent();
-        //}
+                _unitOfWork.Kontakti.Update(kontakt);
+                await _unitOfWork.Save();
 
-        //// Delete contact @api/kontakti/{id}
-        //[HttpDelete("{id:int}")]
-        //public async Task<ActionResult<Kontakt>> Delete(int id)
-        //{
-        //    Kontakt kontakt = await context.Kontakti
-        //                                    .FirstOrDefaultAsync(kontakt => kontakt.KontaktID == id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateContact)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
 
-        //    if (kontakt == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // Delete contact @api/kontakti/{id}
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteContact(int id)
+        {
+            if (id < 1)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteContact)}");
+                return BadRequest();
+            }
 
-        //    context.Kontakti.Remove(kontakt);
-        //    await context.SaveChangesAsync();
+            try
+            {
+                var kontakt = await _unitOfWork.Kontakti.Get(k => k.KontaktID == id);
+                if (kontakt == null)
+                {
+                    _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteContact)}");
+                    return BadRequest("Submitted data is invalid.");
+                }
 
-        //    return kontakt;
-        //}
+                await _unitOfWork.Kontakti.Delete(id);
+                await _unitOfWork.Save();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(DeleteContact)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
     }
 }

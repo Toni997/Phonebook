@@ -17,9 +17,15 @@ namespace MojiKontaktiAPI.Configurations
             CreateMap<BrojTelefona, BrojTelefonaDTO>().ReverseMap();
             CreateMap<Tag, TagDTO>().ReverseMap();
 
+            CreateMap<KontaktIzradaDTO, Kontakt>().ReverseMap();
             CreateMap<EmailAdresaIzradaDTO, EmailAdresa>().ReverseMap();
             CreateMap<BrojTelefonaIzradaDTO, BrojTelefona>().ReverseMap();
             CreateMap<TagIzradaDTO, Tag>().ReverseMap();
+
+            CreateMap<KontaktIzmjenaDTO, Kontakt>().ReverseMap();
+            CreateMap<EmailAdresaIzmjenaDTO, EmailAdresa>().ReverseMap();
+            CreateMap<BrojTelefonaIzmjenaDTO, BrojTelefona>().ReverseMap();
+            CreateMap<TagIzmjenaDTO, Tag>().ReverseMap();
 
         }
     }

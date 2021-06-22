@@ -9,7 +9,6 @@ namespace MojiKontaktiAPI.DTOs
 {
     public class BrojTelefonaIzradaDTO
     {
-        public int KontaktID { get; set; }
         [Required]
         [MaxLength(3)]
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Only numbers allowed.")]
@@ -21,6 +20,11 @@ namespace MojiKontaktiAPI.DTOs
         [MaxLength(30)]
         public string Opis { get; set; }
         public bool Glavni { get; set; }
+    }
+
+    public class BrojTelefonaIzmjenaDTO : BrojTelefonaIzradaDTO
+    {
+
     }
 
     public class BrojTelefonaDTO : BrojTelefonaIzradaDTO
