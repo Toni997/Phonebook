@@ -212,7 +212,8 @@ namespace MojiKontaktiAPI.Controllers
 
             try
             {
-                var kontakt = await _unitOfWork.Kontakti.Get(k => k.KontaktID == id);
+                var kontakt = await _unitOfWork.Kontakti.Get(k => k.KontaktID == id,
+                    new List<string> { "EmailAdrese", "BrojeviTelefona", "Tagovi" });
                 if (kontakt == null)
                 {
                     _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateContact)}");
@@ -220,23 +221,19 @@ namespace MojiKontaktiAPI.Controllers
                 }
 
                 _mapper.Map(kontaktDTO, kontakt);
-                //_mapper.Map(kontaktDTO.EmailAdrese, kontakt.EmailAdrese);
-                //_mapper.Map(kontaktDTO.BrojeviTelefona, kontakt.BrojeviTelefona);
-                //_mapper.Map(kontaktDTO.Tagovi, kontakt.Tagovi);
-                kontakt.EmailAdrese = _mapper.Map<IList<EmailAdresa>>(kontaktDTO.EmailAdrese);
-                kontakt.BrojeviTelefona = _mapper.Map<IList<BrojTelefona>>(kontaktDTO.BrojeviTelefona);
-                kontakt.Tagovi = _mapper.Map<IList<Tag>>(kontaktDTO.Tagovi);
 
                 _unitOfWork.Kontakti.Update(kontakt);
 
+                // updating old emails
                 foreach (var email in kontakt.EmailAdrese)
                 {
-                    if(email.EmailAdresaID != 0)
-                    { 
+                    if (email.EmailAdresaID != 0)
+                    {
                         _unitOfWork.EmailAdrese.Update(email);
                     }
                 }
 
+                // updating old phone numbers
                 foreach (var broj in kontakt.BrojeviTelefona)
                 {
                     if (broj.BrojTelefonaID != 0)
@@ -245,6 +242,7 @@ namespace MojiKontaktiAPI.Controllers
                     }
                 }
 
+                // updating old tags
                 foreach (var tag in kontakt.Tagovi)
                 {
                     if (tag.TagID != 0)
@@ -252,6 +250,39 @@ namespace MojiKontaktiAPI.Controllers
                         _unitOfWork.Tagovi.Update(tag);
                     }
                 }
+
+                // deleting old emails
+                List<int> preostaliEmailoviID = new List<int>();
+                foreach (var email in kontaktDTO.EmailAdrese)
+                {
+                    preostaliEmailoviID.Add(email.EmailAdresaID);
+                }
+                var emailoviZaObrisati = await _unitOfWork.EmailAdrese.GetAll(
+                    expression: e => e.KontaktID == id);
+                emailoviZaObrisati.RemoveAll(e => preostaliEmailoviID.Contains(e.EmailAdresaID));
+                _unitOfWork.EmailAdrese.DeleteRange(emailoviZaObrisati);
+
+                // deleting old phone numbers
+                List<int> preostaliBrojeviID = new List<int>();
+                foreach (var broj in kontaktDTO.BrojeviTelefona)
+                {
+                    preostaliBrojeviID.Add(broj.BrojTelefonaID);
+                }
+                var brojeviZaObrisati = await _unitOfWork.BrojeviTelefona.GetAll(
+                    expression: b => b.KontaktID == id);
+                brojeviZaObrisati.RemoveAll(b => preostaliBrojeviID.Contains(b.BrojTelefonaID));
+                _unitOfWork.BrojeviTelefona.DeleteRange(brojeviZaObrisati);
+
+                // deleting old tags
+                List<int> preostaliTagoviID = new List<int>();
+                foreach (var tag in kontaktDTO.Tagovi)
+                {
+                    preostaliTagoviID.Add(tag.TagID);
+                }
+                var tagoviZaObrisati = await _unitOfWork.Tagovi.GetAll(
+                    expression: t => t.KontaktID == id);
+                tagoviZaObrisati.RemoveAll(t => preostaliTagoviID.Contains(t.TagID));
+                _unitOfWork.Tagovi.DeleteRange(tagoviZaObrisati);
 
                 await _unitOfWork.Save();
 
