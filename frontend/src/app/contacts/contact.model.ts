@@ -24,3 +24,14 @@ export interface kontaktIzradaDTO {
   tagovi: tagIzradaDTO[];
   bookmarkiran: boolean;
 }
+
+export interface kontaktIzmjenaDTO {
+  ime: string;
+  prezime: string;
+  nadimak: string;
+  adresa: string;
+  emailAdrese: emailAdresaDTO[];
+  brojeviTelefona: brojTelefonaDTO[];
+  tagovi: tagDTO[];
+  bookmarkiran: boolean;
+}

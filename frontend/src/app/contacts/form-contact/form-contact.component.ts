@@ -82,6 +82,7 @@ export class FormContactComponent implements OnInit {
   // functions for email addresses
   initEmailAddress() {
     return this.formBuilder.group({
+      emailAdresaID: 0,
       email: [
         '',
         {
@@ -113,6 +114,7 @@ export class FormContactComponent implements OnInit {
     emailAdresses.forEach((e) => {
       formArray.push(
         this.formBuilder.group({
+          emailAdresaID: e.emailAdresaID,
           email: e.email,
           glavna: e.glavna,
         })
@@ -125,6 +127,7 @@ export class FormContactComponent implements OnInit {
   // functions for phone numbers
   initPhoneNumber() {
     return this.formBuilder.group({
+      brojTelefonaID: 0,
       pozivniBrojDrzave: [
         '',
         {
@@ -172,6 +175,7 @@ export class FormContactComponent implements OnInit {
     phoneNumbers.forEach((p) => {
       formArray.push(
         this.formBuilder.group({
+          brojTelefonaID: p.brojTelefonaID,
           pozivniBrojDrzave: p.pozivniBrojDrzave,
           broj: p.broj,
           opis: p.opis,
@@ -186,6 +190,7 @@ export class FormContactComponent implements OnInit {
   // functions for tags
   initTag() {
     return this.formBuilder.group({
+      tagID: 0,
       naziv: [
         '',
         {
@@ -212,6 +217,7 @@ export class FormContactComponent implements OnInit {
     tagovi.forEach((t) => {
       formArray.push(
         this.formBuilder.group({
+          tagID: t.tagID,
           naziv: t.naziv,
         })
       );
@@ -225,6 +231,7 @@ export class FormContactComponent implements OnInit {
     if (!this.model) {
       this.onUserCreated.emit(this.form.value);
     } else {
+      console.log(this.form.value);
       this.onUserUpdated.emit(this.form.value);
     }
   }

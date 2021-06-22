@@ -23,10 +23,26 @@ namespace MojiKontaktiAPI.Configurations
             CreateMap<TagIzradaDTO, Tag>().ReverseMap();
 
             CreateMap<KontaktIzmjenaDTO, Kontakt>().ReverseMap();
+                //.ForMember(d => d.Tagovi, opt => opt.Ignore())
+                //.AfterMap(AddOrUpdateCities);
             CreateMap<EmailAdresaIzmjenaDTO, EmailAdresa>().ReverseMap();
             CreateMap<BrojTelefonaIzmjenaDTO, BrojTelefona>().ReverseMap();
             CreateMap<TagIzmjenaDTO, Tag>().ReverseMap();
 
+            //private void AddOrUpdateCities(KontaktIzmjenaDTO dto, Kontakt kontakt)
+            //{
+            //    foreach (var tagDTO in dto.Tagovi)
+            //    {
+            //        if (tagDTO.TagID == 0)
+            //        {
+            //            kontakt.Tagovi.Add(Mapper.Map<Tag>(tagDTO));
+            //        }
+            //        else
+            //        {
+            //            Mapper.Map(tagDTO, kontakt.Tagovi.SingleOrDefault(c => c.KontaktID == tagDTO.TagID));
+            //        }
+            //    }
+            //}
         }
     }
 }

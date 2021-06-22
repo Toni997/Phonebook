@@ -53,7 +53,7 @@ namespace MojiKontaktiAPI.Controllers
             }
         }
 
-        //Get all contacts that contain keyword in the name @api/kontakti/po-imenu/{keyword}
+        // Get all contacts that contain keyword in the name @api/kontakti/po-imenu/{keyword}
         [HttpGet("po-imenu/{keyword}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -220,8 +220,39 @@ namespace MojiKontaktiAPI.Controllers
                 }
 
                 _mapper.Map(kontaktDTO, kontakt);
+                //_mapper.Map(kontaktDTO.EmailAdrese, kontakt.EmailAdrese);
+                //_mapper.Map(kontaktDTO.BrojeviTelefona, kontakt.BrojeviTelefona);
+                //_mapper.Map(kontaktDTO.Tagovi, kontakt.Tagovi);
+                kontakt.EmailAdrese = _mapper.Map<IList<EmailAdresa>>(kontaktDTO.EmailAdrese);
+                kontakt.BrojeviTelefona = _mapper.Map<IList<BrojTelefona>>(kontaktDTO.BrojeviTelefona);
+                kontakt.Tagovi = _mapper.Map<IList<Tag>>(kontaktDTO.Tagovi);
 
                 _unitOfWork.Kontakti.Update(kontakt);
+
+                foreach (var email in kontakt.EmailAdrese)
+                {
+                    if(email.EmailAdresaID != 0)
+                    { 
+                        _unitOfWork.EmailAdrese.Update(email);
+                    }
+                }
+
+                foreach (var broj in kontakt.BrojeviTelefona)
+                {
+                    if (broj.BrojTelefonaID != 0)
+                    {
+                        _unitOfWork.BrojeviTelefona.Update(broj);
+                    }
+                }
+
+                foreach (var tag in kontakt.Tagovi)
+                {
+                    if (tag.TagID != 0)
+                    {
+                        _unitOfWork.Tagovi.Update(tag);
+                    }
+                }
+
                 await _unitOfWork.Save();
 
                 return NoContent();

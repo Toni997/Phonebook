@@ -19,7 +19,7 @@ namespace MojiKontaktiAPI.DTOs
 
     public class EmailAdresaIzmjenaDTO : EmailAdresaIzradaDTO
     {
-
+        public int EmailAdresaID { get; set; }
     }
 
     public class EmailAdresaDTO : EmailAdresaIzradaDTO

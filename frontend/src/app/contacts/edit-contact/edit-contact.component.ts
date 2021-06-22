@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import kontakti from 'src/app/db/kontakti';
-import { kontaktDTO, kontaktIzradaDTO } from '../contact.model';
+import {
+  kontaktDTO,
+  kontaktIzmjenaDTO,
+  kontaktIzradaDTO,
+} from '../contact.model';
 import { ContactsService } from '../contacts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -28,7 +32,7 @@ export class EditContactComponent implements OnInit {
     });
   }
 
-  updateContact(kontakt: kontaktDTO) {
+  updateContact(kontakt: kontaktIzmjenaDTO) {
     this.contactsService.edit(this.kontakt.kontaktID, kontakt).subscribe(() => {
       this.router.navigate(['/kontakt/detalji/' + this.kontakt.kontaktID]);
       this.snackBar.open('Kontakt uspješno izmijenjen', 'OK', {

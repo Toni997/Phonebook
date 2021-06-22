@@ -24,7 +24,7 @@ namespace MojiKontaktiAPI.DTOs
 
     public class BrojTelefonaIzmjenaDTO : BrojTelefonaIzradaDTO
     {
-
+        public int BrojTelefonaID { get; set; }
     }
 
     public class BrojTelefonaDTO : BrojTelefonaIzradaDTO

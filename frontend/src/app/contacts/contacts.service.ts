@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { kontaktDTO, kontaktIzradaDTO } from './contact.model';
+import {
+  kontaktDTO,
+  kontaktIzmjenaDTO,
+  kontaktIzradaDTO,
+} from './contact.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +36,7 @@ export class ContactsService {
     return this.http.post(this.apiURL, kontakt);
   }
 
-  edit(id: number, kontakt: kontaktDTO) {
+  edit(id: number, kontakt: kontaktIzmjenaDTO) {
     return this.http.put(`${this.apiURL}/${id}`, kontakt);
   }
 
