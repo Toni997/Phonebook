@@ -295,6 +295,43 @@ namespace MojiKontaktiAPI.Controllers
             }
         }
 
+        // Patch contact @api/kontakti/{id}
+        [HttpPatch("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PatchContact(int id, [FromBody] BookmarkPatch bookmark)
+        {
+            if (!ModelState.IsValid || id < 1)
+            {
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateContact)}");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var kontakt = await _unitOfWork.Kontakti.Get(k => k.KontaktID == id);
+                if (kontakt == null)
+                {
+                    _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateContact)}");
+                    return BadRequest("Submitted data is invalid.");
+                }
+
+                kontakt.Bookmarkiran = bookmark.Bookmarkiran;
+
+                _unitOfWork.Kontakti.Update(kontakt);
+
+                await _unitOfWork.Save();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateContact)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
+
         // Delete contact @api/kontakti/{id}
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

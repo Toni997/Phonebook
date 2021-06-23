@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { kontaktDTO } from '../contacts/contact.model';
+import { homeBookmarkPatch, kontaktDTO } from '../contacts/contact.model';
 import { ContactsService } from '../contacts/contacts.service';
 import searchInterface from '../search-box/search.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -58,5 +58,16 @@ export class HomeComponent implements OnInit {
     this.contactsService.getOnlyFavorites().subscribe((contacts) => {
       this.kontakti = contacts;
     });
+  }
+
+  changeBookmarked(event: homeBookmarkPatch) {
+    this.contactsService
+      .patchBookmarked(event.id, event.bookmarkPatch)
+      .subscribe(() => {
+        this.loadAllContacts();
+        this.snackBar.open('Kontakt uspješno izmijenjen', 'OK', {
+          duration: 2000,
+        });
+      });
   }
 }

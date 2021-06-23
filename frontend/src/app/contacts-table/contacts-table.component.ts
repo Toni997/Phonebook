@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { kontaktDTO } from '../contacts/contact.model';
+import { homeBookmarkPatch, kontaktDTO } from '../contacts/contact.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-contacts-table',
   templateUrl: './contacts-table.component.html',
@@ -12,6 +13,9 @@ export class ContactsTableComponent {
 
   @Output()
   onDelete = new EventEmitter<number>();
+
+  @Output()
+  onFavoriteChange = new EventEmitter<homeBookmarkPatch>();
 
   constructor(private snackBar: MatSnackBar) {}
 
@@ -30,10 +34,7 @@ export class ContactsTableComponent {
     this.onDelete.emit(id);
   }
 
-  // implementacija odgođena do daljnjeg
-  // bookmark() {
-  //   this.snackBar.open('Kontakt bookmarkiran', 'OK', {
-  //     duration: 2000,
-  //   });
-  // }
+  onFavorite(event: homeBookmarkPatch) {
+    this.onFavoriteChange.emit(event);
+  }
 }

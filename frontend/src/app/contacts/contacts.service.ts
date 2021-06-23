@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
+  bookmarkPatch,
   kontaktDTO,
   kontaktIzmjenaDTO,
   kontaktIzradaDTO,
@@ -38,6 +39,10 @@ export class ContactsService {
 
   edit(id: number, kontakt: kontaktIzmjenaDTO) {
     return this.http.put(`${this.apiURL}/${id}`, kontakt);
+  }
+
+  patchBookmarked(id: number, bookmark: bookmarkPatch) {
+    return this.http.patch(`${this.apiURL}/${id}`, bookmark);
   }
 
   delete(id: number) {

@@ -35,6 +35,7 @@ export class SearchBoxComponent implements OnInit {
   }
 
   showOnlyFavorites() {
+    this.searchKeyword = '';
     this.onChangeOnlyFavorites.emit(this.onlyFavorites);
   }
 }

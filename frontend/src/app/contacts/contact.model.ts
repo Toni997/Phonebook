@@ -35,3 +35,13 @@ export interface kontaktIzmjenaDTO {
   tagovi: tagDTO[];
   bookmarkiran: boolean;
 }
+
+export interface bookmarkPatch {
+  bookmarkiran: boolean;
+}
+
+export interface homeBookmarkPatch {
+  id: number,
+  bookmarkPatch: bookmarkPatch;
+}
+

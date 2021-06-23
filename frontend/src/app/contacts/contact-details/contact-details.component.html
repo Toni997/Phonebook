@@ -50,7 +50,8 @@
   <div class="flex-container">
     <div class="button-container">
       <button
-        matTooltip="{{kontakt.bookmarkiran ? 'Kontakt je u favoritima' : 'Kontakt nije u favoritima'}}"
+        (click)="patchContact(kontakt.kontaktID, {bookmarkiran: !kontakt.bookmarkiran})"
+        matTooltip="{{kontakt.bookmarkiran ? 'Obriši iz favorita' : 'Dodaj u favorite'}}"
         mat-fab color="primary">
         <mat-icon [ngClass]="{'star-bookmarked' : kontakt.bookmarkiran}">star
         </mat-icon>

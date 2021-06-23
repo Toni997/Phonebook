@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import kontakti from 'src/app/db/kontakti';
-import { kontaktDTO } from '../contact.model';
+import { bookmarkPatch, kontaktDTO } from '../contact.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ContactsService } from '../contacts.service';
 
@@ -24,6 +24,15 @@ export class ContactDetailsComponent implements OnInit {
     this.route.params.subscribe(({ id }) => {
       this.contactsService.getById(id).subscribe((contact) => {
         this.kontakt = contact;
+      });
+    });
+  }
+
+  patchContact(id: number, bookmark: bookmarkPatch) {
+    this.contactsService.patchBookmarked(id, bookmark).subscribe(() => {
+      this.kontakt = {...this.kontakt, bookmarkiran: bookmark.bookmarkiran};
+      this.snackBar.open('Kontakt uspješno izmijenjen', 'OK', {
+        duration: 2000,
       });
     });
   }

@@ -55,8 +55,9 @@
     <th class="only-lg" mat-header-cell *matHeaderCellDef></th>
     <td class="only-lg" mat-cell *matCellDef="let element">
       <div class="action-buttons">
-        <a [ngClass]="{'star-visible': element.bookmarkiran}"
-          matTooltip="{{element.bookmarkiran ? 'Kontakt je u favoritima' : 'Kontakt nije u favoritima'}}"
+        <a (click)="onFavorite({id: element.kontaktID, bookmarkPatch: {bookmarkiran: !element.bookmarkiran}})"
+          [ngClass]="{'star-visible': element.bookmarkiran}"
+          matTooltip="{{element.bookmarkiran ? 'Obriši iz favorita' : 'Dodaj u favorite'}}"
           class="action-button bookmark-button">
           <mat-icon class="star"
             [ngClass]="{'star-bookmarked' : element.bookmarkiran}">star

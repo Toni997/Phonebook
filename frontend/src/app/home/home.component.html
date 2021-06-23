@@ -1,7 +1,9 @@
 <app-search-box (onSubmitSearch)="updateContacts($event)"
   (onChangeOnlyFavorites)="onChangeOnlyFavorites($event)"></app-search-box>
 
-<app-contacts-table [kontakti]="kontakti" (onDelete)="deleteContact($event)">
+<app-contacts-table [kontakti]="kontakti"
+  (onFavoriteChange)="changeBookmarked($event)"
+  (onDelete)="deleteContact($event)">
 </app-contacts-table>
 
 <app-circle-add-button></app-circle-add-button>
