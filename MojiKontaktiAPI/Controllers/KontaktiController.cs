@@ -187,7 +187,6 @@ namespace MojiKontaktiAPI.Controllers
                 var kontakt = _mapper.Map<Kontakt>(kontaktDTO);
                 await _unitOfWork.Kontakti.Insert(kontakt);
                 await _unitOfWork.Save();
-                //return CreatedAtAction("GetContact", kontakt);
                 return CreatedAtRoute("GetContact", new { id = kontakt.KontaktID }, kontakt);
             }
             catch (Exception ex)
@@ -304,7 +303,7 @@ namespace MojiKontaktiAPI.Controllers
         {
             if (!ModelState.IsValid || id < 1)
             {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateContact)}");
+                _logger.LogError($"Invalid PATCH attempt in {nameof(PatchContact)}");
                 return BadRequest(ModelState);
             }
 
@@ -313,7 +312,7 @@ namespace MojiKontaktiAPI.Controllers
                 var kontakt = await _unitOfWork.Kontakti.Get(k => k.KontaktID == id);
                 if (kontakt == null)
                 {
-                    _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateContact)}");
+                    _logger.LogError($"Invalid PATCH attempt in {nameof(PatchContact)}");
                     return BadRequest("Submitted data is invalid.");
                 }
 
@@ -327,7 +326,7 @@ namespace MojiKontaktiAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateContact)}");
+                _logger.LogError(ex, $"Something went wrong in the {nameof(PatchContact)}");
                 return StatusCode(500, "Internal Server Error. Please Try Again Later.");
             }
         }
