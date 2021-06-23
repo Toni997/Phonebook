@@ -251,7 +251,7 @@ namespace MojiKontaktiAPI.Controllers
                 }
 
                 // deleting old emails
-                List<int> preostaliEmailoviID = new List<int>();
+                var preostaliEmailoviID = new List<int>();
                 foreach (var email in kontaktDTO.EmailAdrese)
                 {
                     preostaliEmailoviID.Add(email.EmailAdresaID);
@@ -262,7 +262,7 @@ namespace MojiKontaktiAPI.Controllers
                 _unitOfWork.EmailAdrese.DeleteRange(emailoviZaObrisati);
 
                 // deleting old phone numbers
-                List<int> preostaliBrojeviID = new List<int>();
+                var preostaliBrojeviID = new List<int>();
                 foreach (var broj in kontaktDTO.BrojeviTelefona)
                 {
                     preostaliBrojeviID.Add(broj.BrojTelefonaID);
@@ -273,7 +273,7 @@ namespace MojiKontaktiAPI.Controllers
                 _unitOfWork.BrojeviTelefona.DeleteRange(brojeviZaObrisati);
 
                 // deleting old tags
-                List<int> preostaliTagoviID = new List<int>();
+                var preostaliTagoviID = new List<int>();
                 foreach (var tag in kontaktDTO.Tagovi)
                 {
                     preostaliTagoviID.Add(tag.TagID);
