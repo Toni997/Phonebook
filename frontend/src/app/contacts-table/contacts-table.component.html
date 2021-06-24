@@ -55,7 +55,7 @@
     <th class="only-lg" mat-header-cell *matHeaderCellDef></th>
     <td class="only-lg" mat-cell *matCellDef="let element">
       <div class="action-buttons">
-        <a (click)="onFavorite({id: element.kontaktID, bookmarkPatch: {bookmarkiran: !element.bookmarkiran}})"
+        <a (click)="onFavorite($event, {id: element.kontaktID, bookmarkPatch: {bookmarkiran: !element.bookmarkiran}})"
           [ngClass]="{'star-visible': element.bookmarkiran}"
           matTooltip="{{element.bookmarkiran ? 'Obriši iz favorita' : 'Dodaj u favorite'}}"
           class="action-button bookmark-button">
@@ -63,7 +63,7 @@
             [ngClass]="{'star-bookmarked' : element.bookmarkiran}">star
           </mat-icon>
         </a>
-        <a routerLink="/kontakt/uredi/{{element.kontaktID}}"
+        <a [routerLink]="['/kontakt/uredi', element.kontaktID]"
           class="action-button edit-button" matTooltip="Uredi kontakt">
           <mat-icon>edit</mat-icon>
         </a>
@@ -76,7 +76,7 @@
           [swal]="deleteSwal">
           <mat-icon>delete</mat-icon>
         </a>
-        <a routerLink="/kontakt/detalji/{{element.kontaktID}}"
+        <a [routerLink]="['/kontakt/detalji', element.kontaktID]"
           matTooltip="Pogledaj detalje" class="action-button details-button">
           <mat-icon>visibility</mat-icon>
         </a>
@@ -87,6 +87,6 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-    routerLink="/kontakt/detalji/{{row.kontaktID}}"></tr>
+    [routerLink]="['/kontakt/detalji', row.kontaktID]"></tr>
 
 </table>

@@ -1,5 +1,6 @@
 .action-buttons {
   visibility: hidden;
+  z-index: 999;
 }
 
 mat-icon {

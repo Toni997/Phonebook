@@ -115,7 +115,17 @@ export class FormContactComponent implements OnInit {
       formArray.push(
         this.formBuilder.group({
           emailAdresaID: e.emailAdresaID,
-          email: e.email,
+          email: [
+            e.email,
+            ,
+            {
+              validators: [
+                Validators.required,
+                Validators.email,
+                Validators.maxLength(320),
+              ],
+            },
+          ],
           glavna: e.glavna,
         })
       );
@@ -175,10 +185,33 @@ export class FormContactComponent implements OnInit {
     phoneNumbers.forEach((p) => {
       formArray.push(
         this.formBuilder.group({
-          brojTelefonaID: p.brojTelefonaID,
-          pozivniBrojDrzave: p.pozivniBrojDrzave,
-          broj: p.broj,
-          opis: p.opis,
+          brojTelefonaID: [p.brojTelefonaID],
+          pozivniBrojDrzave: [
+            p.pozivniBrojDrzave,
+            {
+              validators: [
+                Validators.required,
+                Validators.pattern('^[0-9]*$'),
+                Validators.maxLength(3),
+              ],
+            },
+          ],
+          broj: [
+            p.broj,
+            {
+              validators: [
+                Validators.required,
+                Validators.pattern('^[0-9]*$'),
+                Validators.maxLength(10),
+              ],
+            },
+          ],
+          opis: [
+            p.opis,
+            {
+              validators: [Validators.maxLength(30)],
+            },
+          ],
           glavni: p.glavni,
         })
       );
@@ -218,7 +251,12 @@ export class FormContactComponent implements OnInit {
       formArray.push(
         this.formBuilder.group({
           tagID: t.tagID,
-          naziv: t.naziv,
+          naziv: [
+            t.naziv,
+            {
+              validators: [Validators.required, Validators.maxLength(20)],
+            },
+          ],
         })
       );
     });
@@ -234,5 +272,21 @@ export class FormContactComponent implements OnInit {
       console.log(this.form.value);
       this.onUserUpdated.emit(this.form.value);
     }
+  }
+
+  // display dynamic error messages
+  getErrorMessageFieldName() {
+    const field = this.form.get('ime');
+
+    if (field.hasError('required')) {
+      return 'Ovo polje je obavezno';
+    }
+    if (field.hasError('maxlength')) {
+      return 'Unijeli ste preko 50 znakova';
+    }
+    if (field.hasError('pattern')) {
+      return 'Molimo unesite isključivo slova';
+    }
+    return;
   }
 }

@@ -34,7 +34,8 @@ export class ContactsTableComponent {
     this.onDelete.emit(id);
   }
 
-  onFavorite(event: homeBookmarkPatch) {
-    this.onFavoriteChange.emit(event);
+  onFavorite(event: any, bookmarkPatch: homeBookmarkPatch) {
+    this.onFavoriteChange.emit(bookmarkPatch);
+    event.stopPropagation();
   }
 }

@@ -5,7 +5,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Ime*</mat-label>
     <input formControlName="ime" matInput>
-    <mat-error>Nije validan unos</mat-error>
+    <mat-error *ngIf="form.invalid">{{getErrorMessageFieldName()}}</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
@@ -72,6 +72,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Opis</mat-label>
           <input formControlName="opis" matInput>
+          <mat-error>Nije validan unos</mat-error>
         </mat-form-field>
         <a *ngIf="form.controls.brojeviTelefona['controls'].length > 1"
           mat-mini-fab color="warn" (click)="removePhoneNumber(i)">
